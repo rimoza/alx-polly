@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default function PollDetailPage({ params }: { params: { id: string } }) {
+export default async function PollDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const poll = {
-    id: params.id,
+    id: id,
     question: "What's your favorite programming language?",
     options: [
       { id: 1, text: "JavaScript", votes: 45, percentage: 30 },

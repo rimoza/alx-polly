@@ -1,7 +1,24 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useAuth } from "@/contexts/AuthContext"
+import { logout } from "@/app/auth/actions"
 
 export default function DashboardPage() {
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null // This will be handled by middleware redirect
+  }
   const userStats = {
     totalPolls: 12,
     totalVotes: 489,
@@ -17,7 +34,14 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 text-3xl font-bold">Dashboard</h1>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Welcome, {user.email}!</h1>
+        <form action={logout}>
+          <Button variant="outline" type="submit">
+            Sign Out
+          </Button>
+        </form>
+      </div>
 
       <div className="mb-8 grid gap-4 md:grid-cols-4">
         <div className="rounded-lg border border-gray-200 p-6">

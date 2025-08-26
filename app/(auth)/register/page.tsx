@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button"
+import { signup } from "@/app/auth/actions"
+import Link from "next/link"
 
-export default function RegisterPage() {
+interface RegisterPageProps {
+  searchParams: Promise<{ error?: string; message?: string }>
+}
+
+export default async function RegisterPage({ searchParams }: RegisterPageProps) {
+  const { error, message } = await searchParams
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md space-y-8 p-8">
@@ -8,29 +16,26 @@ export default function RegisterPage() {
           <h2 className="text-3xl font-bold">Create your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Already have an account?{" "}
-            <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
         
-        <form className="mt-8 space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium">
-                Full name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                required
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                placeholder="Enter your name"
-              />
-            </div>
-            
+        {error && (
+          <div className="rounded-md bg-red-50 p-4">
+            <p className="text-sm text-red-800">{error}</p>
+          </div>
+        )}
+
+        {message && (
+          <div className="rounded-md bg-green-50 p-4">
+            <p className="text-sm text-green-800">{message}</p>
+          </div>
+        )}
+        
+        <form className="mt-8 space-y-6" action={signup}>
+          <div className="space-y-4">            
             <div>
               <label htmlFor="email" className="block text-sm font-medium">
                 Email address
@@ -41,7 +46,7 @@ export default function RegisterPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
+                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="Enter your email"
               />
             </div>
@@ -56,23 +61,9 @@ export default function RegisterPage() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                placeholder="Create a password"
-              />
-            </div>
-            
-            <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium">
-                Confirm password
-              </label>
-              <input
-                id="confirm-password"
-                name="confirm-password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2"
-                placeholder="Confirm your password"
+                minLength={6}
+                className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                placeholder="Create a password (minimum 6 characters)"
               />
             </div>
           </div>
