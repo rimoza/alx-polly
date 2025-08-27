@@ -13,7 +13,7 @@ export async function GET(
     const download = searchParams.get('download') === 'true';
 
     // Validate shareId exists
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: poll, error } = await supabase
       .from('polls')
       .select('id, title, status')
@@ -62,9 +62,6 @@ export async function GET(
           dark: '#000000',
           light: '#FFFFFF',
         },
-        rendererOpts: {
-          quality: 0.92,
-        },
       });
       contentType = 'image/png';
       filename = `poll-${params.shareId}-qr.png`;
@@ -80,7 +77,7 @@ export async function GET(
       headers.set('Content-Disposition', `attachment; filename="${filename}"`);
     }
 
-    return new Response(qrCode, { headers });
+    return new Response(qrCode as BodyInit, { headers });
   } catch (error) {
     console.error('QR code generation error:', error);
     return NextResponse.json(
@@ -104,7 +101,7 @@ export async function POST(
     } = body;
 
     // Validate shareId exists
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: poll, error } = await supabase
       .from('polls')
       .select('id, title, status')

@@ -1,5 +1,5 @@
 import QRCode from 'qrcode';
-import { supabase } from './supabase/client';
+import { createClient } from '@/lib/supabase/client';
 
 export interface QRCodeOptions {
   size?: number;
@@ -10,9 +10,11 @@ export interface QRCodeOptions {
 }
 
 export interface QRCodeResult {
-  dataUrl: string;
+  qrCode: string;
   shareUrl: string;
   downloadUrl?: string;
+  title?: string;
+  brandColor?: string;
 }
 
 /**
@@ -61,7 +63,7 @@ export async function generatePollQRCode(
     }
 
     return {
-      dataUrl,
+      qrCode: dataUrl,
       shareUrl,
       downloadUrl: `/api/qr/${shareId}?size=${size}&format=${format}`,
     };
@@ -93,6 +95,7 @@ export async function generateAndUploadQRCode(
 
     // Upload to Supabase Storage
     const fileName = `qr-codes/${pollId}.png`;
+    const supabase = createClient();
     const { data, error } = await supabase.storage
       .from('poll-assets')
       .upload(fileName, qrBuffer, {

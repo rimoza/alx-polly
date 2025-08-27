@@ -42,7 +42,7 @@ export function QRCodeGenerator({
     try {
       const result = await generatePollQRCode(shareId, {
         size: customization.size,
-        darkColor: customization.brandColor,
+        brandColor: customization.brandColor,
       });
       
       setQrResult(result);
@@ -73,9 +73,11 @@ export function QRCodeGenerator({
 
       const data = await response.json();
       setQrResult({
-        dataUrl: data.qrCode,
+        qrCode: data.qrCode,
         shareUrl: data.shareUrl,
         downloadUrl: data.downloadUrl,
+        title: data.title,
+        brandColor: data.brandColor,
       });
 
       toast.success('QR code customized successfully!');
@@ -102,7 +104,7 @@ export function QRCodeGenerator({
     if (!qrResult) return;
     
     const link = document.createElement('a');
-    link.href = qrResult.downloadUrl || qrResult.dataUrl;
+    link.href = qrResult.downloadUrl || qrResult.qrCode;
     link.download = `poll-${shareId}-qr.png`;
     document.body.appendChild(link);
     link.click();
@@ -150,7 +152,7 @@ export function QRCodeGenerator({
             </div>
           ) : qrResult ? (
             <img 
-              src={qrResult.dataUrl} 
+              src={qrResult.qrCode} 
               alt="QR Code for poll"
               className="w-48 h-48"
             />
