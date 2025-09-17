@@ -13,9 +13,9 @@ export const pollFormSchema = z.object({
   ).min(2, { message: "At least 2 options are required." })
    .max(10, { message: "Maximum 10 options allowed." }),
   endDate: z.string().optional(),
-  allowMultiple: z.boolean().default(false),
-  requireAuth: z.boolean().default(false),
-  hideResults: z.boolean().default(false),
+  allowMultiple: z.boolean(),
+  requireAuth: z.boolean(),
+  hideResults: z.boolean(),
 })
 
 export type PollFormValues = z.infer<typeof pollFormSchema>

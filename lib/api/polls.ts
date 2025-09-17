@@ -219,13 +219,13 @@ export async function getPollResults(
 
     // Calculate percentages if not provided by backend
     const totalVotes = data.results?.totalVotes || data.poll?.totalVotes || 0;
-    const options = data.results?.options?.map((option: any) => ({
+    const resultOptions = data.results?.options?.map((option: any) => ({
       ...option,
       percentage: totalVotes > 0 ? Math.round((option.votes / totalVotes) * 100 * 100) / 100 : 0
     })) || [];
 
-    const topChoice = options.length > 0
-      ? options.reduce((prev: any, current: any) =>
+    const topChoice = resultOptions.length > 0
+      ? resultOptions.reduce((prev: any, current: any) =>
           prev.votes > current.votes ? prev : current
         )
       : null;
@@ -234,7 +234,7 @@ export async function getPollResults(
       poll: data.poll,
       results: {
         totalVotes,
-        options,
+        options: resultOptions,
         ...(options.includeAnalytics && {
           analytics: {
             ...data.results?.analytics,
