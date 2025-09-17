@@ -45,7 +45,7 @@ export interface CommentReport {
   createdAt: string
 }
 
-export interface ReactionSummary {
+export type ReactionSummary = {
   [K in ReactionType]: {
     count: number
     userReacted: boolean

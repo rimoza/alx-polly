@@ -40,7 +40,7 @@ export async function GET(
       return NextResponse.json(
         {
           error: 'Invalid request parameters',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       )
@@ -73,7 +73,7 @@ export async function POST(
       return NextResponse.json(
         {
           error: 'Invalid request data',
-          details: error.errors
+          details: error.issues
         },
         { status: 400 }
       )

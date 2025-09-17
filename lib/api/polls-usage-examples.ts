@@ -21,7 +21,7 @@ export async function exampleBasicVoting() {
 
     return result;
   } catch (error) {
-    console.error("Voting failed:", error.message);
+    console.error("Voting failed:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -41,7 +41,7 @@ export async function exampleMultipleChoiceVoting() {
 
     return result;
   } catch (error) {
-    console.error("Multiple choice voting failed:", error.message);
+    console.error("Multiple choice voting failed:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -61,7 +61,7 @@ export async function exampleCustomIdentifierVoting() {
 
     return result;
   } catch (error) {
-    console.error("Custom identifier voting failed:", error.message);
+    console.error("Custom identifier voting failed:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -85,7 +85,7 @@ export async function exampleBasicPollResults() {
 
     return results;
   } catch (error) {
-    console.error("Failed to get poll results:", error.message);
+    console.error("Failed to get poll results:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -114,7 +114,7 @@ export async function examplePollResultsWithAnalytics() {
 
     return results;
   } catch (error) {
-    console.error("Failed to get detailed poll analytics:", error.message);
+    console.error("Failed to get detailed poll analytics:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -155,7 +155,7 @@ export async function exampleCompleteVotingWorkflow() {
     };
 
   } catch (error) {
-    console.error("Complete workflow failed:", error.message);
+    console.error("Complete workflow failed:", error instanceof Error ? error.message : error);
     throw error;
   }
 }
@@ -183,7 +183,7 @@ export async function exampleErrorHandling() {
       await example.action();
       console.log(`✅ ${example.name} succeeded unexpectedly`);
     } catch (error) {
-      console.log(`❌ ${example.name} failed as expected:`, error.message);
+      console.log(`❌ ${example.name} failed as expected:`, error instanceof Error ? error.message : error);
     }
   }
 }
