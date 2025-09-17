@@ -17,32 +17,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
-  
-  const supabase = createClient()
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    }
+    try {
+      const client = createClient()
+      setSupabase(client)
 
-    getSession()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      const getSession = async () => {
+        const { data: { session } } = await client.auth.getSession()
         setSession(session)
         setUser(session?.user ?? null)
         setLoading(false)
       }
-    )
 
-    return () => subscription.unsubscribe()
-  }, [supabase.auth])
+      getSession()
+
+      const { data: { subscription } } = client.auth.onAuthStateChange(
+        async (event, session) => {
+          setSession(session)
+          setUser(session?.user ?? null)
+          setLoading(false)
+        }
+      )
+
+      return () => subscription.unsubscribe()
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error)
+      setLoading(false)
+    }
+  }, [])
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
   }
 
   const value = {
